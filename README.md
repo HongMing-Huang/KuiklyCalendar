@@ -1,6 +1,6 @@
 # KuiklyCalendar
 
-基于 [KuiklyUI](https://github.com/Tencent-TDS/KuiklyUI) 跨端框架构建的日历组件库，提供月视图、周视图、年视图三种视图模式，支持 SINGLE / MULTI / RANGE 三种日期选择模式，内置中/英/日/韩四语言国际化和事件标记功能。支持 Android / iOS / Web / HarmonyOS 多平台。
+基于 [KuiklyUI](https://github.com/Tencent-TDS/KuiklyUI) 跨端框架构建的日历组件库，提供月视图、周视图、年视图三种视图模式，支持 SINGLE / MULTI / RANGE 三种日期选择模式，内置中/英/日/韩四语言国际化和事件标记功能。支持 Android / iOS 平台（Web / HarmonyOS 待后续版本支持）。
 
 > 对应 Issue：[Tencent-TDS/KuiklyUI#1476](https://github.com/Tencent-TDS/KuiklyUI/issues/1476)
 

@@ -42,7 +42,16 @@ class CalendarEvent : ComposeEvent() {
     /** 月份切换事件回调，当用户切换显示月份时触发 */
     var onMonthChanged: ((year: Int, month: Int) -> Unit)? = null
 
-    /** 视图模式切换事件回调，当视图模式发生变化时触发 */
+    /**
+     * 视图模式切换事件回调，当视图模式发生变化时触发
+     *
+     * @deprecated CalendarView 当前不管理视图模式切换，此回调不会被触发。
+     *             如需周视图请使用 WeekCalendar，年视图请使用 YearCalendar。
+     */
+    @Deprecated(
+        message = "CalendarView 不支持视图模式切换，请使用 WeekCalendar 或 YearCalendar",
+        level = DeprecationLevel.WARNING
+    )
     var onViewModeChanged: ((CalendarViewMode) -> Unit)? = null
 
     /**
@@ -66,8 +75,14 @@ class CalendarEvent : ComposeEvent() {
     /**
      * 设置视图模式切换回调（DSL 风格）
      *
+     * @deprecated CalendarView 当前不管理视图模式切换，此方法无效。
+     *             如需周视图请使用 WeekCalendar，年视图请使用 YearCalendar。
      * @param handler 回调函数，参数为新的 [CalendarViewMode]
      */
+    @Deprecated(
+        message = "CalendarView 不支持视图模式切换，请使用 WeekCalendar 或 YearCalendar",
+        level = DeprecationLevel.WARNING
+    )
     fun viewModeChangedEvent(handler: (CalendarViewMode) -> Unit) {
         onViewModeChanged = handler
     }

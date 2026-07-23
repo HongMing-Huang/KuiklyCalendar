@@ -76,12 +76,13 @@ data class CalendarDate(
  * 日期网格单元格数据，用于日历视图的渲染。
  *
  * 每个单元格对应日历网格中的一个位置，可能是当月日期，也可能是上月或下月的占位日期。
+ * 由 [CalendarUtils.generateMonthGrid] 和 [CalendarUtils.generateWeekGrid] 生成。
  *
- * @param day 显示的日期数字，0 表示占位空格
- * @param date 对应的 [CalendarDate]，当 [day] 为 0 时为占位日期
- * @param isCurrentMonth 是否属于当前显示的月份
- * @param isToday 是否是今天
- * @param hasEvent 是否有事件标记
+ * @param day 显示的日期数字，0 表示占位空格（上月或下月的灰色位置）
+ * @param date 对应的 [CalendarDate]，当 [day] 为 0 时为占位日期（仍包含完整的年月日信息）
+ * @param isCurrentMonth 是否属于当前显示的月份，`false` 表示上月/下月占位日期，通常灰色渲染
+ * @param isToday 是否是今天，为 `true` 时通常渲染为带边框圆圈的特殊样式
+ * @param hasEvent 是否有事件标记，为 `true` 时在日期下方显示彩色指示点，默认 `false`
  */
 data class DayCell(
     val day: Int,
@@ -126,9 +127,21 @@ enum class CalendarSelectionMode {
 /**
  * 事件标记数据，用于在日历日期上显示事件指示点。
  *
- * @param date 标记日期
- * @param color 标记颜色
- * @param label 标记标签（可选）
+ * 通过 [CalendarAttr.eventMarks] 传入，在日历网格中对应日期下方显示彩色小圆点。
+ * 支持为同一日期设置多个标记，但仅显示第一个。
+ *
+ * 使用示例：
+ * ```
+ * val mark = CalendarEventMark(
+ *     date = CalendarDate(2025, 7, 15),
+ *     color = Color(0xFFFF4444),  // 红色指示点
+ *     label = "会议"
+ * )
+ * ```
+ *
+ * @param date 标记日期，对应日历网格中的具体日期
+ * @param color 标记颜色，使用 [Color] 对象（如 `Color(0xFFFF4444)` 表示红色），渲染为 4×4 像素圆点
+ * @param label 标记标签文本（可选），可用于无障碍描述或扩展 UI 显示，默认为空字符串
  */
 data class CalendarEventMark(
     val date: CalendarDate,
@@ -139,10 +152,15 @@ data class CalendarEventMark(
 /**
  * 日期选择结果。
  *
- * 封装用户在日历中选择的日期信息。
+ * 封装用户在日历中选择的日期信息，通过 [CalendarEvent.onDateSelected] 回调传递。
  *
- * @param dates 选中的日期列表
- * @param timeInMillis 首个选中日期的毫秒时间戳，默认为 0
+ * - [CalendarSelectionMode.SINGLE] 模式：[dates] 包含 1 个元素
+ * - [CalendarSelectionMode.MULTI] 模式：[dates] 包含所有选中的不连续日期
+ * - [CalendarSelectionMode.RANGE] 模式：[dates] 包含起止范围内的所有连续日期
+ *
+ * @param dates 选中的日期列表，内容取决于选择模式（单选/多选/范围）
+ * @param timeInMillis 首个选中日期对应的 UTC 毫秒时间戳（00:00:00），默认为 0，
+ *                     由 [CalendarUtils.dateToTimeMillis] 计算
  */
 data class CalendarSelection(
     val dates: List<CalendarDate>,

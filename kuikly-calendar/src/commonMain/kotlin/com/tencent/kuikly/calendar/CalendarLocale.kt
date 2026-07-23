@@ -49,7 +49,13 @@ data class CalendarLocale(
     companion object {
         private val cache = mutableMapOf<String, CalendarLocale>()
 
-        /** 中文简体 */
+        /**
+         * 获取中文简体语言包。
+         *
+         * 周起始日为周一（firstDayOfWeek=1），标题格式为 "{year}年{month}月"。
+         *
+         * @return 中文简体 [CalendarLocale] 实例（单例缓存）
+         */
         fun chinese(): CalendarLocale {
             return cache.getOrPut("zh-CN") {
                 CalendarLocale(
@@ -71,7 +77,14 @@ data class CalendarLocale(
             }
         }
 
-        /** 英文 */
+        /**
+         * 获取英文语言包。
+         *
+         * 周起始日为周日（firstDayOfWeek=0），标题格式为 "{monthName} {year}"。
+         * 星期名称如 Sunday/Monday，月份名称如 January/February。
+         *
+         * @return 英文 [CalendarLocale] 实例（单例缓存）
+         */
         fun english(): CalendarLocale {
             return cache.getOrPut("en-US") {
                 CalendarLocale(
@@ -93,7 +106,14 @@ data class CalendarLocale(
             }
         }
 
-        /** 日文 */
+        /**
+         * 获取日文语言包。
+         *
+         * 周起始日为周日（firstDayOfWeek=0），标题格式为 "{year}年{month}月"。
+         * 星期名称如 日曜日/月曜日，月份名称如 1月/2月。
+         *
+         * @return 日文 [CalendarLocale] 实例（单例缓存）
+         */
         fun japanese(): CalendarLocale {
             return cache.getOrPut("ja-JP") {
                 CalendarLocale(
@@ -115,7 +135,14 @@ data class CalendarLocale(
             }
         }
 
-        /** 韩文 */
+        /**
+         * 获取韩文语言包。
+         *
+         * 周起始日为周日（firstDayOfWeek=0），标题格式为 "{year}년 {month}월"。
+         * 星期名称如 일요일/월요일，月份名称如 1월/2월。
+         *
+         * @return 韩文 [CalendarLocale] 实例（单例缓存）
+         */
         fun korean(): CalendarLocale {
             return cache.getOrPut("ko-KR") {
                 CalendarLocale(
@@ -138,9 +165,18 @@ data class CalendarLocale(
         }
 
         /**
-         * 按 BCP47 语言标签获取国际化配置
-         * 支持的标签：zh-CN, en-US, ja-JP, ko-KR
-         * 未知标签默认返回英文
+         * 按 BCP47 语言标签获取国际化配置。
+         *
+         * 支持的标签：
+         * - `"zh-CN"` → [chinese]
+         * - `"en-US"` → [english]
+         * - `"ja-JP"` → [japanese]
+         * - `"ko-KR"` → [korean]
+         *
+         * 未知标签默认返回英文（[english]）。
+         *
+         * @param tag BCP47 语言标签字符串
+         * @return 对应语言的 [CalendarLocale] 实例
          */
         fun of(tag: String): CalendarLocale {
             return when (tag) {
