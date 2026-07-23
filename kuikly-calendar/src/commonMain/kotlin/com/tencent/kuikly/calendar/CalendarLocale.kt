@@ -170,7 +170,7 @@ data class CalendarLocale(
      * 获取星期短名称（考虑 firstDayOfWeek 偏移）
      * @return 按 firstDayOfWeek 排列的 7 个星期短名称
      */
-    fun orderedWeekDayShortNames(): List<String> {
+    fun orderedWeekDayShortNames(firstDayOfWeek: Int = this.firstDayOfWeek): List<String> {
         val names = weekDayShortNames.toMutableList()
         // 将列表按 firstDayOfWeek 旋转
         // firstDayOfWeek=0 表示从周日开始（索引0）

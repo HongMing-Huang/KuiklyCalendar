@@ -26,8 +26,10 @@ import com.tencent.kuikly.core.reactive.handler.observable
  *
  * 通过 ComposeView 三件套封装，支持月视图、日期选择、事件标记等功能。
  * 内部组合 [CalendarHeaderView] 和 [CalendarGridView] 子组件，
- * 管理响应式状态（当前年月、选中日期、视图模式），
+ * 管理响应式状态（当前年月、选中日期），
  * 并提供 SINGLE / MULTI / RANGE 三种日期选择模式。
+ *
+ * 如需周视图请使用 WeekCalendar，如需年视图请使用 YearCalendar。
  *
  * 使用示例：
  * ```
@@ -66,9 +68,6 @@ class CalendarView : ComposeView<CalendarAttr, CalendarEvent>() {
     /** 选中日期集合 */
     var selectedDates: Set<CalendarDate> by observable(emptySet())
 
-    /** 当前视图模式 */
-    var currentViewMode: CalendarViewMode by observable(CalendarViewMode.MONTH)
-
     // endregion
 
     // region 非响应式状态（内部缓存）
@@ -106,7 +105,6 @@ class CalendarView : ComposeView<CalendarAttr, CalendarEvent>() {
         val today = CalendarUtils.today()
         currentYear = if (attr.initialYear > 0) attr.initialYear else today.first
         currentMonth = if (attr.initialMonth > 0) attr.initialMonth else today.second
-        currentViewMode = attr.viewMode
 
         // 初始选中日期
         if (attr.initialDay > 0) {
@@ -298,7 +296,7 @@ class CalendarView : ComposeView<CalendarAttr, CalendarEvent>() {
                     attr {
                         cells = ctx.monthGridData
                         selectedDates = ctx.selectedDates
-                        weekDayLabels = ctx.attr.locale.orderedWeekDayShortNames()
+                        weekDayLabels = ctx.attr.locale.orderedWeekDayShortNames(ctx.attr.firstDayOfWeek)
                         cellSize = if (ctx.attr.cellSize > 0f) ctx.attr.cellSize else 44f
                         weekHeaderHeight = ctx.attr.weekHeaderHeight
                         selectedColor = ctx.attr.selectedColor

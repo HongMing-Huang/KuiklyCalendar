@@ -62,6 +62,7 @@ class CalendarAttr : ComposeAttr() {
     // === 视图配置 ===
 
     /** 日历视图模式，默认月视图 */
+    @Deprecated("Calendar 仅支持月视图，周视图请使用 WeekCalendar，年视图请使用 YearCalendar")
     var viewMode: CalendarViewMode = CalendarViewMode.MONTH
 
     /** 日期选择模式，默认单选 */

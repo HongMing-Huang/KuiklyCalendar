@@ -240,18 +240,21 @@ object CalendarUtils {
     // region today / timestamp
 
     /**
-     * 获取当前日期（UTC 时区）。
+     * 获取今天的日期。
      *
-     * 使用 [DateTime.currentTimestamp] 获取当前 UTC 毫秒时间戳，
-     * 通过 [todayFromTimestamp] 转换为年月日。
+     * 注意：[DateTime.currentTimestamp] 返回 UTC 毫秒时间戳，直接使用可能导致
+     * 非 UTC 时区设备的日期偏差（例如 UTC+8 凌晨会取到前一天的日期）。
+     * 建议调用方传入本地时间戳以确保日期准确：
+     * ```kotlin
+     * val localTs = DateTime.currentTimestamp() + timezoneOffsetMillis
+     * today(localTs)
+     * ```
      *
-     * **注意**：返回的是 UTC 日期，如需本地时区日期，请使用 [todayFromTimestamp]
-     * 并传入本地时区偏移后的时间戳。
-     *
-     * @return [Triple]`(year, month, day)`，month 为 1-based (1-12)
+     * @param localTimestampMillis 本地时间戳（毫秒），为 null 时使用 UTC 时间戳
      */
-    fun today(): Triple<Int, Int, Int> {
-        return todayFromTimestamp(DateTime.currentTimestamp())
+    fun today(localTimestampMillis: Long? = null): Triple<Int, Int, Int> {
+        val ts = localTimestampMillis ?: DateTime.currentTimestamp()
+        return todayFromTimestamp(ts)
     }
 
     /**
@@ -279,29 +282,6 @@ object CalendarUtils {
     fun dateToTimeMillis(year: Int, month: Int, day: Int): Long {
         val days = dateToDaysSinceEpoch(year, month, day)
         return days * MILLIS_PER_DAY
-    }
-
-    // endregion
-
-    // region monthGridRows
-
-    /**
-     * 获取指定月份网格所需的行数。
-     *
-     * 根据当月 1 号的星期位置和 [firstDayOfWeek] 计算前置占位天数，
-     * 结合当月总天数，确定需要 5 行还是 6 行来完整显示该月。
-     *
-     * @param year 年份
-     * @param month 月份 (1-12)
-     * @param firstDayOfWeek 周起始日（0=周日, 1=周一），默认周一
-     * @return 5 或 6
-     */
-    fun monthGridRows(year: Int, month: Int, firstDayOfWeek: Int = 1): Int {
-        val firstDow = dayOfWeek(year, month, 1)
-        val daysBefore = (firstDow - firstDayOfWeek + 7) % 7
-        val daysInCurMonth = daysInMonth(year, month)
-        val totalCells = daysBefore + daysInCurMonth
-        return if (totalCells <= 35) 5 else 6
     }
 
     // endregion
