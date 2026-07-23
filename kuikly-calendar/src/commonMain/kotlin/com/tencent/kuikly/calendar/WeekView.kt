@@ -209,7 +209,7 @@ class WeekView : ComposeView<WeekViewAttr, WeekViewEvent>() {
                     flexDirectionRow()
                     height(ctx.attr.weekHeaderHeight)
                 }
-                for (label in ctx.attr.locale.orderedWeekDayShortNames()) {
+                for (label in ctx.attr.locale.orderedWeekDayShortNames(ctx.attr.firstDayOfWeek)) {
                     View {
                         attr {
                             flex(1f)
